@@ -1,17 +1,56 @@
+{% load employee_filter %}
+{% load mptt_tags %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    {% block css %}
-        {% load static %}
-    {% endblock %}
     <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css"/>
 </head>
-<body>
 
-    {% block content %}
-        <p>Test</p>
-    {% endblock %}
+{% block content %}
+    {% recursetree departments %}
+        <ul id="myUL">
+            <li><span class="caret">{{ node.name }}</span>
+                {% if not node.is_leaf_node %}
+                    <ul class="nested">
+                        <li>{{ children }}</li>
+                    </ul>
+                {% else %}
+                    <ul class="nested">
+                        <li>
+                            <div>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Position</th>
+                                            <th>Employment_date</th>
+                                            <th>Salary</th>
+                                        </tr>
+                                    </thead>
+
+                                {% for employee in node|in_department %}
+                                    <tr>
+                                        <td>{{ employee.full_name }}</td>
+                                        <td>{{ employee.position }}</td>
+                                        <td>{{ employee.employment_date }}</td>
+                                        <td>{{ employee.salary }}</td>
+                                    </tr>
+                                {% endfor %}
+                        </table>
+                            </div>
+                        </li>
+                    </ul>
+                {% endif %}
+            </button>
+            </div>
+            <script src="{% static 'js/main.js' %}"></script>
+            </li>
+        </ul>
+    {% endrecursetree %}
+{% endblock %}
 
 </body>
 </html>
