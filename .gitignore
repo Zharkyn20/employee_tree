@@ -4,3 +4,5 @@ venv
 tree/__pycache__
 tree/migrations/__pycache__
 tree/migrations/0*
+staticfiles/
+db.sqlite3

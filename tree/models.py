@@ -1,6 +1,7 @@
+from django.core.exceptions import ValidationError
 from django.db import models
-from django.urls import reverse
-from mptt.models import MPTTModel, TreeForeignKey
+from mptt.models import MPTTModel
+from treewidget.fields import TreeForeignKey
 
 
 class Department(MPTTModel):
@@ -11,20 +12,19 @@ class Department(MPTTModel):
     parent = TreeForeignKey(
         "self",
         verbose_name="отдел-родитель",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
         related_name="children",
     )
 
-    def get_absolute_url(self):
-        return reverse('employee-by-department', args=[str(self.name)])
-
     def __str__(self):
         return self.name
 
-    class MPTTMeta:
-        order_insertion_by = ['name']
+    def clean(self):
+        parent_level = self.parent.get_level()
+        if parent_level == 4:
+            raise ValidationError("Иерархия отделов дозволена только до 5")
 
 
 class Employee(models.Model):
@@ -41,3 +41,8 @@ class Employee(models.Model):
 
     def __str__(self):
         return f"{self.full_name}-{self.position}"
+
+    def clean(self):
+        if not self.department.is_leaf_node():
+            raise ValidationError("Отдел должен быть листом (не иметь под отделов)")
+        super(Employee, self).clean()
