@@ -13,7 +13,6 @@ class EmployeeAdmin(admin.ModelAdmin):
 
 class DepartmentAdmin(DraggableMPTTAdmin):
 
-    # mptt_level_indent = 20
     expand_tree_by_default = True
 
 
