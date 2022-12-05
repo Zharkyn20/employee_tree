@@ -5,10 +5,7 @@ from treewidget.fields import TreeForeignKey
 
 
 class Department(MPTTModel):
-    name = models.CharField(
-        max_length=250,
-        verbose_name="Название отдела"
-    )
+    name = models.CharField(max_length=250, verbose_name="Название отдела")
     parent = TreeForeignKey(
         "self",
         verbose_name="отдел-родитель",
@@ -26,13 +23,17 @@ class Department(MPTTModel):
         if parent_level == 4:
             raise ValidationError("Иерархия отделов дозволена только до 5")
 
+    class Meta:
+        verbose_name = "Отдел"
+        verbose_name_plural = "Отделы"
+
 
 class Employee(models.Model):
     department = TreeForeignKey(
         Department,
         verbose_name="отдел",
         on_delete=models.PROTECT,
-        related_name="employees"
+        related_name="employees",
     )
     full_name = models.CharField(max_length=350)
     position = models.CharField(max_length=250)
@@ -46,3 +47,7 @@ class Employee(models.Model):
         if not self.department.is_leaf_node():
             raise ValidationError("Отдел должен быть листом (не иметь под отделов)")
         super(Employee, self).clean()
+
+    class Meta:
+        verbose_name = "Сотрудник"
+        verbose_name_plural = "Сотрудники"

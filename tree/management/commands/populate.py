@@ -9,7 +9,7 @@ from populate_data import (
     ROOT_DEPARTMENTS,
     FIRST_NAMES,
     LAST_NAMES,
-    POSITIONS
+    POSITIONS,
 )
 
 
@@ -31,7 +31,8 @@ class Command(BaseCommand):
                 parent = random.choice(parent_departments)
                 Department.objects.create(
                     name=name,
-                    parent=parent,)
+                    parent=parent,
+                )
 
             level += 1
 
@@ -41,23 +42,24 @@ class Command(BaseCommand):
         employee_objects = []
         for leaf in leaf_departments:
             for _ in range(5000):
-                full_name = f'{random.choice(FIRST_NAMES)} {random.choice(LAST_NAMES)}'
+                full_name = f"{random.choice(FIRST_NAMES)} {random.choice(LAST_NAMES)}"
                 position = random.choice(POSITIONS)
                 employment_date = date.today()
                 salary = random.randint(500, 10000)
 
-                employee_objects.append(Employee(
-                    department=leaf,
-                    full_name=full_name,
-                    position=position,
-                    employment_date=employment_date,
-                    salary=salary
-                ))
+                employee_objects.append(
+                    Employee(
+                        department=leaf,
+                        full_name=full_name,
+                        position=position,
+                        employment_date=employment_date,
+                        salary=salary,
+                    )
+                )
         Employee.objects.bulk_create(employee_objects)
 
     def create_superuser(self):
         User.objects.create_superuser(
-            username='admin',
-            password='admin',
+            username="admin",
+            password="admin",
         )
-

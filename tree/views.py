@@ -29,7 +29,8 @@ def index(request):
     dep_queryset = Department.objects.all()
     empl_queryset = Employee.objects.all()
 
-    return render(request, "index.html", context={'departments': dep_queryset,
-                                                  'employees': empl_queryset})
-
-
+    return render(
+        request,
+        "index.html",
+        context={"departments": dep_queryset, "employees": empl_queryset},
+    )

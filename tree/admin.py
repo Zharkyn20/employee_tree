@@ -7,7 +7,6 @@ from tree.models import Employee, Department
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-
     class Meta:
         model = Employee
 
